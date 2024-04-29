@@ -24,7 +24,12 @@ function handleModuleDirectivesPlugin() {
 export default defineConfig({
   base: './',
   plugins: [
-    react(),
+    react({
+      jsxImportSource: "@emotion/react",
+      babel: {
+        plugins: ["@emotion/babel-plugin"],
+      },
+    }),
     handleModuleDirectivesPlugin(),
     legacy({
       targets: ['defaults', 'not IE 11'],

@@ -1,47 +1,76 @@
-import { FC, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
+import { css } from "@emotion/react"
 import {
   Panel,
   PanelHeader,
   Header,
   Button,
   Group,
-  Div,
   NavIdProps,
+  CardGrid,
 } from '@vkontakte/vkui';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { useLazyGetLatestStoriesQuery } from 'src/services/storiesApi';
+import { useGetLatestStoriesIdQuery } from 'src/services/storiesApi';
+import { lazy, Suspense } from 'react';
+import StoryCardLoader from 'src/components/StoryCard/StoryCardLoader';
+
+const StoryCard = lazy(() => import('src/components/StoryCard/StoryCard'));
 
 export interface HomeProps extends NavIdProps {
 
 }
 
 export const Home: FC<HomeProps> = ({ id }) => {
-  const routeNavigator = useRouteNavigator();
-  const [getLatestStories, { data }] = useLazyGetLatestStoriesQuery()
+  const { data, refetch } = useGetLatestStoriesIdQuery(null, {
+    pollingInterval: 60000,
+    skipPollingIfUnfocused: true,
+    refetchOnFocus: true
+  })
+  const offset: number = 20
+  const [showItemsCount, setShowItemsCount] = useState(offset)
+
+  const handleScroll = () => {
+    const windowHeight = window.innerHeight
+    const items = document.querySelectorAll('.story-card')
+    const lastItem = items[items.length - 1]
+    const pos = lastItem?.getBoundingClientRect()
+
+    if (pos?.y < windowHeight) {
+      setShowItemsCount(prev => Math.min(prev + offset, 100))
+    }
+  };
 
   useEffect(() => {
-    getLatestStories({})
-  }, [])
-
-  // useEffect(() => {
-  //   console.log(data)
-  // }, [data])
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <Panel id={id}>
-      <PanelHeader>Новости</PanelHeader>
-      <Group header={<Header mode="secondary">User Data Fetched with VK Bridge</Header>}>
-        {/* <Cell before={photo_200 && <Avatar src={photo_200} />} subtitle={city?.title}>
-            {`${first_name} ${last_name}`}
-          </Cell> */}
-      </Group>
-
-      <Group header={<Header mode="secondary">Navigation Example</Header>}>
-        <Div>
-          <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('story_page')}>
-            Покажите Персика, пожалуйста!
-          </Button>
-        </Div>
+      <PanelHeader>Hacker News</PanelHeader>
+      <Group
+        header={
+          <Header
+            mode="secondary"
+            aside={
+              <Button mode='tertiary' onClick={() => refetch()}>
+                Update stories list
+              </Button>
+            }
+          >Latest stories</Header>
+        }
+        mode='card'
+      >
+        <CardGrid size='m' spaced>
+          {data && data.length > 0 ?
+            data.slice(0, showItemsCount).map((storyId: number) => (
+              <Suspense fallback={<StoryCardLoader />} key={storyId}>
+                <StoryCard id={storyId} />
+              </Suspense>
+            ))
+            : <p>No available stories</p>}
+        </CardGrid>
       </Group>
     </Panel>
   );

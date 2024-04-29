@@ -19,7 +19,7 @@ export const routes = RoutesConfig.create([
   createRoot(DEFAULT_ROOT, [
     createView(DEFAULT_VIEW, [
       createPanel(DEFAULT_VIEW_PANELS.HOME, '/', []),
-      createPanel(DEFAULT_VIEW_PANELS.STORY_PAGE, `/${DEFAULT_VIEW_PANELS.STORY_PAGE}`, []),
+      createPanel(DEFAULT_VIEW_PANELS.STORY_PAGE, `/story/:id`, []),
     ]),
   ]),
 ]);
