@@ -3,11 +3,12 @@ import {
   Panel,
   PanelHeader,
   Header,
-  Button,
+  Link,
   Group,
   NavIdProps,
   CardGrid,
-  Text
+  Text,
+  Button
 } from '@vkontakte/vkui';
 import { useGetLatestStoriesIdQuery } from 'src/services/storiesApi';
 import { lazy, Suspense } from 'react';
@@ -52,9 +53,9 @@ export const Home: FC<HomeProps> = ({ id }) => {
       <Group
         header={
           <Header
-            mode="secondary"
+            mode="tertiary"
             aside={
-              <Button mode='tertiary' onClick={() => refetch()}>
+              <Button mode='link' onClick={() => refetch()}>
                 Update stories list
               </Button>
             }

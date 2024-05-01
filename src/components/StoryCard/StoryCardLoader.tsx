@@ -4,7 +4,7 @@ import { Spinner, Card } from '@vkontakte/vkui';
 interface IStoryCardLoaderProps {
 }
 
-const StoryCardLoader: React.FC<IStoryCardLoaderProps> = (props) => {
+const StoryCardLoader: React.FC<IStoryCardLoaderProps> = () => {
   return (
     <>
       <Card>

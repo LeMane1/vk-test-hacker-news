@@ -60,9 +60,9 @@ export const StoryPage: FC<NavIdProps> = ({ id }) => {
 
       {data && <Group
         header={<Header
-          mode="secondary"
+          mode="tertiary"
           aside={
-            <Button mode='tertiary' onClick={() => refetch()}>
+            <Button mode='link' onClick={() => refetch()}>
               Update comments
             </Button>
           }
