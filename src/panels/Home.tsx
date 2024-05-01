@@ -62,7 +62,7 @@ export const Home: FC<HomeProps> = ({ id }) => {
         }
         mode='card'
       >
-        <CardGrid size='m' spaced>
+        <CardGrid size='l'>
           {data && data.length > 0 && data.slice(0, showItemsCount).map((storyId: number) => (
             <Suspense fallback={<StoryCardLoader />} key={storyId}>
               <StoryCard id={storyId} />

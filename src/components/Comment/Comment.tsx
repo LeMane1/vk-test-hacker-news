@@ -70,7 +70,7 @@ const Comment: React.FC<ICommentProps> = ({ id, isRootComment = false }) => {
             </Footnote>
             {data?.kids?.length && isRootComment &&
               <Button mode='link' onClick={() => setShowChildComments(!showChildComments)}>
-                {showChildComments ? 'Hide comments' : 'Show more'}
+                {showChildComments ? 'Hide answers' : 'Show more'}
               </Button>
             }
           </div>
