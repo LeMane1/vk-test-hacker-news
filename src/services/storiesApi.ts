@@ -7,7 +7,6 @@ export const storiesApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: BASE_URL,
 	}),
-	// tagTypes: [TAG_TYPES.CATEGORIES, TAG_TYPES.CURRENCIES, TAG_TYPES.SPENDINGS],
 	endpoints: (builder) => ({
 		getLatestStoriesId: builder.query({
 			query: () => ({

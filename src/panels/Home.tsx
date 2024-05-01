@@ -1,5 +1,4 @@
 import { FC, useState, useEffect } from 'react';
-import { css } from "@emotion/react"
 import {
   Panel,
   PanelHeader,
@@ -8,6 +7,7 @@ import {
   Group,
   NavIdProps,
   CardGrid,
+  Text
 } from '@vkontakte/vkui';
 import { useGetLatestStoriesIdQuery } from 'src/services/storiesApi';
 import { lazy, Suspense } from 'react';
@@ -20,7 +20,7 @@ export interface HomeProps extends NavIdProps {
 }
 
 export const Home: FC<HomeProps> = ({ id }) => {
-  const { data, refetch } = useGetLatestStoriesIdQuery(null, {
+  const { data, isLoading, isError, refetch } = useGetLatestStoriesIdQuery(null, {
     pollingInterval: 60000,
     skipPollingIfUnfocused: true,
     refetchOnFocus: true
@@ -63,14 +63,19 @@ export const Home: FC<HomeProps> = ({ id }) => {
         mode='card'
       >
         <CardGrid size='m' spaced>
-          {data && data.length > 0 ?
-            data.slice(0, showItemsCount).map((storyId: number) => (
-              <Suspense fallback={<StoryCardLoader />} key={storyId}>
-                <StoryCard id={storyId} />
-              </Suspense>
-            ))
-            : <p>No available stories</p>}
+          {data && data.length > 0 && data.slice(0, showItemsCount).map((storyId: number) => (
+            <Suspense fallback={<StoryCardLoader />} key={storyId}>
+              <StoryCard id={storyId} />
+            </Suspense>
+          ))
+          }
         </CardGrid>
+        {
+          !data && !isLoading && <p>No available stories</p>
+        }
+        {
+          isError && <Text>Something went wrong</Text>
+        }
       </Group>
     </Panel>
   );

@@ -13,12 +13,16 @@ import {
   Div,
   Footnote,
   Paragraph,
+  Text,
+  Spinner,
+  Button
 } from '@vkontakte/vkui';
 import { useRouteNavigator, useParams } from '@vkontakte/vk-mini-apps-router';
 import { useGetStoryInfoQuery } from 'src/services/storiesApi';
 import { Icon24ExternalLinkOutline } from '@vkontakte/icons'
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import Comment from 'src/components/Comment/Comment';
 
 dayjs.extend(customParseFormat)
 
@@ -29,14 +33,14 @@ const footnoteStyle = css`
 export const StoryPage: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
   const params = useParams<'id'>();
-  const { data, isLoading, isError } = useGetStoryInfoQuery(Number(params?.id))
+  const { data, isLoading, isError, refetch } = useGetStoryInfoQuery(Number(params?.id))
 
   return (
     <Panel id={id}>
       <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.back()} />}>
         Hacker News
       </PanelHeader>
-      <Group>
+      {data && <Group>
         <Header mode="primary" aside={
           <Link href={data?.url} target="_blank" hasVisited>
             To story source <Icon24ExternalLinkOutline width={16} height={16} />
@@ -49,22 +53,40 @@ export const StoryPage: FC<NavIdProps> = ({ id }) => {
           </Paragraph>
           <Spacing />
           <Footnote css={footnoteStyle}>
-            {data && data.time && dayjs.unix(data.time).format("MM-DD-YYYY")} {data?.by}
+            {data && data.time && dayjs.unix(data.time).format("MM.DD.YYYY")} {data?.by}
           </Footnote>
         </Div>
-      </Group>
+      </Group>}
 
-      <Group
+      {data && <Group
         header={<Header
           mode="secondary"
-          indicator="667"
+          aside={
+            <Button mode='tertiary' onClick={() => refetch()}>
+              Update comments
+            </Button>
+          }
+          indicator={data?.kids?.length}
         >
           Comments
         </Header>}
       >
-      </Group>
-
-
+        {data && data.kids ?
+          data.kids.map(comment => (
+            <Comment id={comment} key={comment} isRootComment={true} />
+          ))
+          :
+          <Div>
+            <Text>There are no comments</Text>
+          </Div>
+        }
+      </Group>}
+      {
+        isLoading && <Spinner />
+      }
+      {
+        isError && <Text>Something went wrong</Text>
+      }
     </Panel>
   );
 };

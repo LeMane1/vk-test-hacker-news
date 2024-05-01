@@ -1,7 +1,6 @@
 import { ContentCard, Title } from '@vkontakte/vkui';
 import * as React from 'react'
 import { useGetStoryInfoQuery } from 'src/services/storiesApi';
-import { css } from '@emotion/react';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
