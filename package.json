@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "tunnel": "vk-tunnel --http-protocol=http --host=localhost --port=3000",
-    "deploy": "vite build && vk-miniapps-deploy"
+    "deploy": "vite build && vk-miniapps-deploy",
+    "test": "vitest"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -21,14 +22,18 @@
     "@vkontakte/vkui": "^6.0.0",
     "dayjs": "^1.11.11",
     "html-react-parser": "^5.1.10",
+    "jsdom": "^24.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.1"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.11.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^15.0.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "@types/redux-mock-store": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "@vitejs/plugin-legacy": "^5.3.1",
@@ -40,8 +45,11 @@
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "jest-fetch-mock": "^3.0.3",
+    "redux-mock-store": "^1.5.4",
     "terser": "^5.4.0",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vitest": "^1.5.3"
   }
 }
